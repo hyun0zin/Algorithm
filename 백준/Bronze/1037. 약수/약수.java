@@ -4,17 +4,17 @@ import java.util.Scanner;
 public class Main {
 	public static void main(String[] args) {
 		Scanner sc = new Scanner(System.in);
-		long N = sc.nextLong();
-		long[] measureArray = new long[(int) N];
+		int N = sc.nextInt();
+		int[] measureArray = new int[N];
 
 		for (int i = 0; i < N; i++) {
-			measureArray[i] = sc.nextLong();
+			measureArray[i] = sc.nextInt();
 		}
 
 		Arrays.sort(measureArray);
 
 //		System.out.println(Arrays.toString(measureArray));
-		long ans = measureArray[0] * measureArray[(int) N - 1];
+		long ans = (long) measureArray[0] * measureArray[N - 1];
 		System.out.println(ans);
 
 	}
