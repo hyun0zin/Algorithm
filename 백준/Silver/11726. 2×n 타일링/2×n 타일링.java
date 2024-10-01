@@ -1,26 +1,31 @@
-import java.util.Scanner;
+import java.io.BufferedReader;
+import java.io.InputStreamReader;
+import java.io.IOException;
 
-// BOJ11726_2xn 타일링
 public class Main {
-	public static void main(String[] args) {
-		Scanner sc = new Scanner(System.in);
+    public static void main(String[] args) throws IOException {
+        // 입력 최적화를 위해 BufferedReader 사용
+        BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+        
+        int N = Integer.parseInt(br.readLine());
 
-		int N = sc.nextInt();
+        // N이 1일 경우 예외 처리
+        if (N == 1) {
+            System.out.println(1);
+            return;
+        }
 
-		int[] dp = new int[N + 1];
+        int[] dp = new int[N + 1];
 
-		dp[1] = 1;
+        dp[1] = 1;
+        dp[2] = 2;
 
-		// 1<= N <= 1,000 이므로 N이 1일 때 예외처리
-		if (N > 1) {
-			dp[2] = 2;
-		}
+        // 점화식을 이용하여 DP 테이블 채우기
+        for (int i = 3; i <= N; i++) {
+            dp[i] = (dp[i - 1] + dp[i - 2]) % 10007;
+        }
 
-		for (int i = 3; i <= N; i++) {
-			dp[i] = (dp[i - 1] + dp[i - 2]) % 10007;
-		}
-
-		System.out.println(dp[N]);
-
-	}
+        // 결과 출력
+        System.out.println(dp[N]);
+    }
 }
