@@ -1,67 +1,69 @@
-
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Scanner;
 
 public class Main {
-	static int W, H, count; // 지도의 너비 w, 높이 h, 섬의 개수 count
-	static int[][] arr; // 섬
-	static boolean[][] visited; // 방문여부 체크
-	static int[] dx = { -1, 1, 0, 0, -1, -1, 1, 1 }; // 상하좌우, 대각선 좌상 우상 좌하 우하
-	static int[] dy = { 0, 0, -1, 1, -1, 1, -1, 1 }; // 상하좌우, 대각선 좌상 우상 좌하 우하
+
+	static int[] dr = { -1, 1, 0, 0, -1, -1, 1, 1 };
+	static int[] dc = { 0, 0, -1, 1, -1, 1, -1, 1 };
+	static int w, h, ans;
+	static int[][] arr;
+	static boolean[][] visited;
+	static List<Integer> list = new ArrayList<>();
 
 	public static void main(String[] args) {
 		Scanner sc = new Scanner(System.in);
+		StringBuilder sb = new StringBuilder();
 
-		while (true) {
+		while (sc.hasNext()) {
+			w = sc.nextInt();
+			h = sc.nextInt();
 
-			W = sc.nextInt();
-			H = sc.nextInt();
-
-			// 입력의 마지막 줄에는 0이 두 개 주어짐.
-			if (W == 0 && H == 0) {
+			if (w == 0 && h == 0)
 				break;
-			}
 
-			arr = new int[H][W];
-			visited = new boolean[H][W];
+			// w <-> h 값 그대로 작성 X
+			arr = new int[h][w];
+			visited = new boolean[h][w];
 
-			for (int i = 0; i < H; i++) {
-				for (int j = 0; j < W; j++) {
+			for (int i = 0; i < h; i++) {
+				for (int j = 0; j < w; j++) {
 					arr[i][j] = sc.nextInt();
+					if (arr[i][j] == 0)
+						visited[i][j] = true;
 				}
 			}
-			// 입력 끝
 
-			count = 0;
-			for (int i = 0; i < H; i++) {
-				for (int j = 0; j < W; j++) {
+			for (int i = 0; i < h; i++) {
+				for (int j = 0; j < w; j++) {
 					if (arr[i][j] == 1 && !visited[i][j]) {
+						ans = 0;
 						dfs(i, j);
-						count++;
+						list.add(ans);
+
 					}
 				}
 			}
+//			System.out.println(ans);
+			System.out.println(list.size());
+			list.clear();
 
-			System.out.println(count);
-		} // while
-	} // main
-
-	static void dfs(int x, int y) {
-		visited[x][y] = true;
-		int nx = x;
-		int ny = y;
-		// 상하좌우, 대각선 좌상 우상 좌하 우하
-		for (int i = 0; i < 8; i++) {
-			int nc = nx + dx[i];
-			int nr = ny + dy[i];
-			// 방문 X, 연결된 섬이라면
-			if (nc >= 0 && nr >= 0 && nc < H && nr < W) {
-				if (!visited[nc][nr] && arr[nc][nr] == 1) {
-					visited[nc][nr] = true;
-					dfs(nc, nr);
-				}
-			}
 		}
+	}
 
+	static void dfs(int i, int j) {
+		visited[i][j] = true;
+
+		for (int dir = 0; dir < 8; dir++) {
+			int nr = i + dr[dir];
+			int nc = j + dc[dir];
+
+			if (nr < 0 || nr >= h || nc < 0 || nc >= w || visited[nr][nc])
+				continue;
+
+			dfs(nr, nc);
+		}
+		ans++;
 	} // dfs
 
-} // class
+}
