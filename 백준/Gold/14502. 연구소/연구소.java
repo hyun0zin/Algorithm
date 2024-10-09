@@ -7,9 +7,11 @@ import java.util.List;
 import java.util.Queue;
 import java.util.StringTokenizer;
 
+// BOJ14502_연구소 
 public class Main {
     static int N, M, ans;
     static int[][] map;
+    static int[][] copyMap ; // map 복사본
     static int[] dr = { -1, 1, 0, 0 };
     static int[] dc = { 0, 0, -1, 1 };
 
@@ -33,6 +35,7 @@ public class Main {
         M = Integer.parseInt(st.nextToken());
 
         map = new int[N][M];
+        copyMap = new int[N][M];
         list = new ArrayList<>();
 
         for (int i = 0; i < N; i++) {
@@ -57,7 +60,7 @@ public class Main {
     static void combi(int idx, int cnt) {
         if (cnt == 3) {
             // 3개의 빈칸을 벽으로 세운 후 바이러스 퍼뜨리기
-            int[][] copyMap = new int[N][M]; // map 복사본
+           
             for (int i = 0; i < N; i++) {
                 for (int j = 0; j < M; j++) {
                     copyMap[i][j] = map[i][j]; // 현재 map 복사
