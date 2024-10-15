@@ -1,23 +1,20 @@
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
-import java.util.ArrayList;
-import java.util.List;
 import java.util.PriorityQueue;
 import java.util.StringTokenizer;
 
 // BOJ16398_행성연결
-// 메모리 :
-// 시간 :
+// 메모리 : 189244KB
+// 시간 : 972ms
 
 public class Main {
 	public static class Edge implements Comparable<Edge> {
-		int A, B, W;
+		int Node, W;
 
-		public Edge(int a, int b, int w) {
+		public Edge(int node, int w) {
 			super();
-			A = a;
-			B = b;
+			Node = node;
 			W = w;
 		}
 
@@ -42,45 +39,38 @@ public class Main {
 			}
 		}
 
-		// 인접 행렬 => 인접 리스트로 받아서 Edge에 저장해주기
-		List<Edge>[] adjList = new ArrayList[N];
-		for (int i = 0; i < N; i++) {
-			adjList[i] = new ArrayList<>();
-		}
-
-		for (int i = 0; i < N - 1; i++) {
-			for (int j = i + 1; j < N; j++) {
-				adjList[i].add(new Edge(i, j, adjArr[i][j]));
-				adjList[j].add(new Edge(j, i, adjArr[i][j]));
-			}
-		}
-
 		// 방문 체크
 		boolean[] visited = new boolean[N]; // 방문한 정점인지 체크
 
 		PriorityQueue<Edge> pq = new PriorityQueue<>();
-		visited[0] = true;
 
 		long ans = 0;
-		int pick = 1;
+		int pick = 0;
 
-		pq.addAll(adjList[0]);
+		pq.add(new Edge(0, 0)); // 첫 시작 Node와 가중치 0 pq에 넣기
 
 		// 모든 정점을 다 방문할 때까지 반복
 		while (pick != N) {
 			Edge e = pq.poll();
-
+			
+//			System.out.println(e.Node+" 노드 ");
+			
 			// 이미 방문한 노드라면 pass
-			if (visited[e.B])
+			if (visited[e.Node])
 				continue;
 
 			// 방문하지 않은 노드라면 가중치 더하기
 			ans += e.W;
-			visited[e.B] = true;
+			visited[e.Node] = true;
 			pick++;
 
 			// 해당 노드와 연결된 노드 우선순위 큐에 넣기
-			pq.addAll(adjList[e.B]);
+			for (int nextNode = 0; nextNode < N; nextNode++) {
+				if (!visited[nextNode]) {
+					pq.add(new Edge(nextNode, adjArr[e.Node][nextNode]));
+					
+				}
+			}
 		} // while
 
 		System.out.println(ans);
