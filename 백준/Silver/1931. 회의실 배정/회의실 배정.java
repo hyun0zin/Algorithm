@@ -1,9 +1,15 @@
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.PriorityQueue;
 import java.util.Scanner;
+import java.util.StringTokenizer;
 
 // BOJ1931_회의실배정
+// 메모리 : 165864KB
+// 시간 : 928ms
 public class Main {
 
 	public static class Node implements Comparable<Node> {
@@ -31,15 +37,18 @@ public class Main {
 		}
 	}
 
-	public static void main(String[] args) {
-		Scanner sc = new Scanner(System.in);
+	public static void main(String[] args) throws NumberFormatException, IOException {
+		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+		StringTokenizer st;
+//		Scanner sc = new Scanner(System.in);
 
-		int N = sc.nextInt(); // 회의의 수
+		int N = Integer.parseInt(br.readLine()); // 회의의 수
 
 		ArrayList<Node> list = new ArrayList<>();
 		for (int i = 0; i < N; i++) {
-			int startTime = sc.nextInt();
-			int endTime = sc.nextInt();
+			st = new StringTokenizer(br.readLine());
+			int startTime = Integer.parseInt(st.nextToken());
+			int endTime = Integer.parseInt(st.nextToken());
 			list.add(new Node(startTime, endTime));
 		}
 
@@ -49,7 +58,7 @@ public class Main {
 		int ans = 0; // 정답 수
 		int endTime = 0; // 끝나는 수 갱신을 위한 변수
 
-		// list 내의 모든 노드를 돌면서, 
+		// list 내의 모든 노드를 돌면서,
 		for (Node meeting : list) {
 			// 다음 회의 시작시간이 이전 회의 끝나는 시간보다 크면,
 			// 끝나는 시간 갱신
@@ -58,7 +67,7 @@ public class Main {
 				ans++; // 회의 수 up
 			}
 		}
-		
+
 		System.out.println(ans);
 
 	}
