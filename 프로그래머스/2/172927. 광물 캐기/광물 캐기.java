@@ -24,16 +24,19 @@ class Solution {
 		for (int i = 0; i < totalMineralNum; i += 5) {
 			if (i / 5 == cnt)
 				break;
-
+			
 			for (int j = i; j < i + 5; j++) {
+				// 현재 광물이 다이아인 경우, 
 				if (minerals[j].equals("diamond")) {
-					dp += 1;
-					ip += 5;
-					sp += 25;
+					dp += 1; // 다이아 곡괭이로 깰 때의 피로도 
+					ip += 5; // 철 곡괭이로 깰 때의 피로도
+					sp += 25; // 돌 곡괭이로 깰 때의 피로도
+				// 철인 경우, 
 				} else if (minerals[j].equals("iron")) {
 					dp += 1;
 					ip += 1;
 					sp += 5;
+				// 돌인 경우, 
 				} else {
 					dp += 1;
 					ip += 1;
@@ -44,10 +47,11 @@ class Solution {
 				}
 			}
 
-			section[i / 5][0] = dp;
-			section[i / 5][1] = ip;
-			section[i / 5][2] = sp;
-
+			section[i / 5][0] = dp; // 다이아 곡괭이로 5개 캤을 때의 총 피로도 
+			section[i / 5][1] = ip; // 철 곡괭이로 5개 캤을 때의 총 피로도
+			section[i / 5][2] = sp; // 돌 곡괭이로 5개 캤을 때의 총 피로도
+			
+			// 피로도 값 초기화 
 			dp = ip = sp = 0;
 		}
 
