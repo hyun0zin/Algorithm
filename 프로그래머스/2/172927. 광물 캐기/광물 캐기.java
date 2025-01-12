@@ -1,72 +1,71 @@
 import java.util.*;
 
 class Solution {
-    
-    static class Mineral {
-        private int diamond;
-        private int iron;
-        private int stone;
-        
-        public Mineral(int diamond, int iron, int stone) {
-            this.diamond = diamond;
-            this.iron = iron;
-            this.stone = stone;
-        }
-    }
-    
-    static int[][] scoreBoard;
-    static List<Mineral> list;
-    
-    public int solution(int[] picks, String[] minerals) {
-        int answer = 0;
-        
-        scoreBoard = new int[][]{{1, 1, 1}, {5, 1, 1}, {25, 5, 1}};
-        
-        int totalPicks = Arrays.stream(picks).sum();
-        list = new ArrayList<>();
-        for(int i = 0; i < minerals.length; i+=5) {
-            if(totalPicks == 0) break;
-            
-            int dia = 0, iron = 0, stone = 0;
-            for(int j = i; j < i + 5; j++) {
-                if(j == minerals.length) break;
-                
-                String mineral = minerals[j];
-                int val = mineral.equals("iron") ? 1 : 
-                    mineral.equals("stone") ? 2 : 0;
-                
-                dia += scoreBoard[0][val];
-                iron += scoreBoard[1][val];
-                stone += scoreBoard[2][val];
-            }
-            
-            list.add(new Mineral(dia, iron, stone));
-            totalPicks--;
-        }
-        
-        Collections.sort(list, ((o1, o2) -> (o2.stone - o1.stone)));
-        for(Mineral m : list) {
-            int dia = m.diamond;
-            int iron = m.iron;
-            int stone = m.stone;
-            
-            if(picks[0] > 0) {
-                answer += dia;
-                picks[0]--;
-                continue;
-            }
-            if(picks[1] > 0) {
-                answer += iron;
-                picks[1]--;
-                continue;
-            }
-            if(picks[2] > 0) {
-                answer += stone;
-                picks[2]--;
-                continue;
-            }
-        }
-        
-        return answer;
-    }
+   static int[][] section;
+
+	public int solution(int[] picks, String[] minerals) {
+		int diaCnt = picks[0]; // 다이아 곡괭이 갯수
+		int ironCnt = picks[1]; // 철 곡괭이 갯수
+		int stoneCnt = picks[2]; // 돌 곡괭이 갯수
+
+		int totalMineralNum = minerals.length;
+
+//		System.out.println(totalMineralNum);
+
+		int answer = 0;
+		int pickCnt = diaCnt + ironCnt + stoneCnt; // 곡괭이 총 갯수
+
+		int cnt = Math.min(totalMineralNum / 5 + 1, pickCnt);
+		section = new int[cnt][3]; // 5개씩 묶었을 때, 광물의 피로도 계산
+
+		int dp = 0, ip = 0, sp = 0;
+
+		// 곡괭이 수 반복 -> 곡괭이 수가 부족하면 나머지 광물은 못 캠
+		for (int i = 0; i < totalMineralNum; i += 5) {
+			if (i / 5 == cnt)
+				break;
+
+			for (int j = i; j < i + 5; j++) {
+				if (minerals[j].equals("diamond")) {
+					dp += 1;
+					ip += 5;
+					sp += 25;
+				} else if (minerals[j].equals("iron")) {
+					dp += 1;
+					ip += 1;
+					sp += 5;
+				} else {
+					dp += 1;
+					ip += 1;
+					sp += 1;
+				}
+				if (j == totalMineralNum - 1) {
+					break;
+				}
+			}
+
+			section[i / 5][0] = dp;
+			section[i / 5][1] = ip;
+			section[i / 5][2] = sp;
+
+			dp = ip = sp = 0;
+		}
+
+		Arrays.sort(section, (o1, o2) -> (o2[2] - o1[2]));
+
+		for (int i = 0; i < cnt; i++) {
+			if (diaCnt != 0) {
+				answer += section[i][0]; // 다이아로 깼을 때의 피로도
+				diaCnt--; // 다이어 곡괭이 갯수 --
+			} else if (ironCnt != 0) {
+				answer += section[i][1]; // 철로 깼을 때의 피로도
+				ironCnt--; // 철 곡괭이 갯수 --
+			} else if (stoneCnt != 0) {
+				answer += section[i][2]; // 돌로 깼을 때의 피로도
+				stoneCnt--; // 돌 곡괭이 갯수 --
+			}
+		}
+
+		return answer;
+	}
 }
