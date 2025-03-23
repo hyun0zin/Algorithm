@@ -30,7 +30,9 @@ class Solution {
         while(!queue.isEmpty()){
             int now = queue.poll();
             
+            // 연결된 다른 지역 찾기
             for(int next : adjList.get(now)){
+                // 한 번 방문 시, 최단 거리 확정 (가중치가 모두 1이므로)
                 if(dist[next] == -1){
                     dist[next] = dist[now] +1;
                     queue.add(next);
