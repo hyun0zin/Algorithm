@@ -13,20 +13,21 @@ class Solution {
             doubleArr[i + n] = elements[i];
         }
 
+        // 중복 제거를 위해 Set 사용
         Set<Integer> sumSet = new HashSet<>();
 
         // 길이 1부터 n까지의 연속 부분 수열 합 계산
-        for(int len=1; len<=n; len++){
-            for(int i = 0; i<n; i++){
+        for(int len=1; len<=n; len++){ // 부분 수열의 길이
+            for(int i = 0; i<n; i++){ // 시작하는 인덱스
                 int sum = 0;
-                for(int j=i; j<i+len; j++){
+                for(int j=i; j<i+len; j++){ // 시작 인덱스로부터 ~ 부분수열 길이까지의 합
                     sum += doubleArr[j];
                 }
-                sumSet.add(sum);
+                sumSet.add(sum); // Set에 sum 넣기
             }
         }
         
-        answer = sumSet.size();
+        answer = sumSet.size(); // Set에 추가된 길이 별 부분 수열의 합 갯수 구하기
 
         return answer;
     }
